@@ -1,5 +1,5 @@
 {
-  "name": "Ghost theme development using Foundation",
+  "name": "ghost-sass-theme-dev",
   "version": "1.0.0",
   "description": "Base installation of Gulp and Foundation",
   "scripts": {},

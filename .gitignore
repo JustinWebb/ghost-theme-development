@@ -6,11 +6,11 @@ node_modules
 content/themes/dev
 
 # generated files
-*.sublime-workspace
 *.map
 *.css
 
 # excluded files
+*.sublime-workspace
 .DS_Store
 .sublime-gulp.cache
 dev-theme.zip
