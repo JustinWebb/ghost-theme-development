@@ -1,15 +1,19 @@
 {
-  "name": "inuit-starting-point",
+  "name": "Ghost theme development using Foundation",
   "version": "1.0.0",
-  "description": "Base installation of gulp and inuit",
+  "description": "Base installation of Gulp and Foundation",
   "scripts": {},
-  "main": "gulpfile.js",
+  "main": "Gulpfile.js",
   "keywords": [
-    "inuit",
+    "ghost",
+    "blog",
+    "theme",
+    "gulp",
     "scss",
+    "foundation",
     "scaffolding"
   ],
-  "author": "Johannes Schriewer <j.schriewer@anfe.ma>",
+  "author": "Justin Webb <jw.justinwebb.io>",
   "license": "BSD",
   "devDependencies": {
     "ghost": "^0.5.3",
@@ -33,5 +37,5 @@
     "lazypipe": "^0.2.2"
   },
   "readme": "readme.md",
-  "repository": "http://git.dunkelstern.de/dunkelstern/ghost-template-dev.git"
+  "repository": "https://github.com/JustinWebb/ghost-theme-development.git"
 }

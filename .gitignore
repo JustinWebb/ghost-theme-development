@@ -1,8 +1,16 @@
+# directories
 bower_components
+vendor
 build
 node_modules
 content/themes/dev
-dev-theme.zip
-.sublime-gulp.cache
+
+# generated files
 *.sublime-workspace
 *.map
+*.css
+
+# excluded files
+.DS_Store
+.sublime-gulp.cache
+dev-theme.zip

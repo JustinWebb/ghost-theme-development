@@ -1,35 +1,33 @@
 {
-  "name": "inuit-starting-point",
-  "version": "1.0.0",
+  "name": "jwio",
+  "version": "0.0.0",
+  "homepage": "https://github.com/JustinWebb/ghost-theme-development",
   "authors": [
-    "Johannes Schriewer <j.schriewer@anfe.ma>"
+    "Justin Webb <jw@justinwebb.io>"
   ],
-  "description": "Base installation of gulp and inuit",
-  "main": "gulpfile.js",
+  "main": "Gulpfile.js",
+  "moduleType": [
+    "es6",
+    "node"
+  ],
   "keywords": [
-    "inuitcss",
+    "ghost",
+    "blog",
+    "theme",
+    "gulp",
     "scss",
-    "inuit",
-    "scaffolding"
+    "foundation"
   ],
-  "license": "BSD",
-  "homepage": "http://blog.dunkelstern.de/",
-  "private": true,
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
+    "vendor",
     "test",
     "tests"
   ],
   "dependencies": {
-    "inuit-starter-kit": "~0.2.8",
-    "inuit-widths": "~0.3.2",
-    "inuit-images": "~0.3.2",
-    "inuit-layout": "~0.3.2",
-    "inuit-list-bare": "~0.3.0",
-    "inuit-tabs": "~0.2.1",
-    "inuit-buttons": "~0.4.1",
-    "inuit-lists": "~0.1.0"
+    "foundation": "~5.5.2"
   }
 }
