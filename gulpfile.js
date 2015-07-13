@@ -5,6 +5,7 @@ var browserSync = require('browser-sync');
 var sync = require('run-sequence');
 var plugins = require('gulp-load-plugins')();
 var config = require('./build.config');
+var isFirstRun = true;
 var autoprefixBrowsers = ['last 2 version', 'safari 5', 'ie 9', 'opera 12.1'];
 
 
@@ -64,31 +65,9 @@ gulp.task('js_minify', function () {
 		.pipe(gulp.dest(config.dev.assets.js));
 });
 
-
 //
 // copy handlebars theme files over
 //
-gulp.task('templates_livereload', function () {
-	var embed_live_reload = lazypipe()
-		.pipe(plugins.rename, function (path) {
-				path.extname = '.html';
-			}
-		)
-		.pipe(plugins.embedlr)
-		.pipe(plugins.rename, function (path) {
-				path.extname = '.hbs';
-			}
-		);
-
-	gulp.src(config.src_files.hbs)
-		.pipe(plugins.plumber(onError))
-		.pipe(plugins.gulpif(function (file) {
-				return endsWith(file.path, 'default.hbs');
-			}, embed_live_reload()
-		))
-		.pipe(gulp.dest(config.dev.root));
-});
-
 gulp.task('templates', function () {
 	gulp.src(config.src_files.hbs)
 		.pipe(gulp.dest(config.dev.root));
@@ -112,41 +91,52 @@ gulp.task('fonts', function () {
 
 
 //
-// just run a live reload server and watch files for changes
+// Start Ghost as NPM module and ensure no progress without
+// successful instantiation
 //
-gulp.task('launchGhost', function () {
-	var test = null;
-	ghost(config.ghost.app).then(function (ghostServer) {
-		test = ghostServer.start();
-	});
-	console.log('Serve: ', test);
+gulp.task('launchGhost', function (cb) {
+	ghost(config.ghost.app)
+		.then(function (ghostServer) {
+			return ghostServer.start();
+		}).then(function (ghostInstance) {
+				// console.log('GHOST -------->\n', ghostInstance);
+				console.log('Ghost is ready...');
+				cb();
+		});
 });
 
+//
+// Compile source files and launch Ghost theme-dev instance
+//
 gulp.task('serve', function (cb) {
-	var compilerTasks = ['sass', 'js', 'templates_livereload', 'fonts', 'support'];
+	var compilerTasks = ['sass', 'js', 'templates', 'fonts', 'support'];
 	sync(compilerTasks, 'launchGhost', cb);
 });
 
+
 //
-// just run a live reload server and watch files for changes
+// Launch preview server on top of running Ghost instance
 //
-gulp.task('watch', function () {
-
-	gulp.watch(config.src_files.sass, ['sass']);
-	gulp.watch(config.src_files.hbs, ['templates_livereload']);
-	gulp.watch(config.src_files.fonts, ['fonts']);
-	gulp.watch(config.src_files.support, ['support']);
-	gulp.watch(config.src_files.js, ['js']);
-
-	gulp.watch(config.dev.assets.css, browserSync.reload);
-	gulp.watch(config.dev.assets.hbs, browserSync.reload);
-
-});
-
-gulp.task('preview', function () {	
+gulp.task('preview', function (cb) {	
 		browserSync({
 	    proxy: 'localhost:2368'
 		});
+
+	cb();
+});
+
+//
+// Trigger livereload on preview server after changes to theme
+// source files
+//
+gulp.task('watch', function () {
+	gulp.watch(config.dev.theme_files, browserSync.reload);
+
+	gulp.watch(config.src_files.scss, ['sass']);
+	gulp.watch(config.src_files.hbs, ['templates']);
+	gulp.watch(config.src_files.js, ['js']);
+	gulp.watch(config.src_files.fonts, ['fonts']);
+	gulp.watch(config.src_files.support, ['support']);
 });
 
 //
@@ -172,10 +162,10 @@ gulp.task('dist', ['build'], function () {
 		.pipe(gulp.dest('.'));
 });
 
-
 //
-// default task, compile everything and launch preview server
+// default task; compile everything, start Ghost and launch 
+// the BrowserSync preview server
 // 
 gulp.task('default', function (cb) {
-	sync(['serve', 'watch'], 'preview', cb);
+	sync('serve', 'preview', 'watch', cb);
 });
